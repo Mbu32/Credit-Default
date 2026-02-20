@@ -44,4 +44,4 @@ I created a high-level flag `is_consolidation` by searching for keywords like "c
 ---
 
 ## How to Run
-The full SQL transformation script can be found here: [cleaning_logic.sql](./cleaning_logic.sql)
+The full SQL transformation script can be found here: [cleaning_logic.sql](/SQL/analysis_queries.sql)
