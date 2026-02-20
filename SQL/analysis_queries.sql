@@ -1,7 +1,7 @@
 
 --1
 Alter table dbo.loan
-DROP COLUMN id,member_id; #they were both empty
+DROP COLUMN id,member_id; 
 
 ALTER TABLE dbo.loan
 ADD Loan_ID INT Identity(1,1) NOT NULL;
