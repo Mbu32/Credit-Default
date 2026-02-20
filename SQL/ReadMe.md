@@ -22,17 +22,17 @@ To allow the model to learn the difference between "Good" and "Bad" loans, I cre
 ### 2.4 Public Records (`pub_rec`)
 The data showed that having even one public record significantly increases default probability. I converted this into a **Binary Flag** (0/1) to simplify the model's input.
 
-![Public Record Default Analysis](/Images/pub_rec.jpg)
+<img src="/Images/pub_rec.jpg" width="50%" />
 
 ### 2.5 Open Credit Lines (`open_acc`)
 I analyzed the number of open credit lines to determine the relationship between account volume and default risk. This helps the model understand the borrower's current credit utilization and management.
 
-![Open Accounts Analysis](/Images/open_acc.jpg)
+<img src="/Images/open_acc.jpg" width="50%" />
 
 ### 2.6 Credit Inquiries (`inq_last_6mths`)
 Excessive inquiries are a sign of credit hunger. Values above 6 are extreme outliers with low sample sizes, so I capped this at 6 to reduce "noise" in the tail end of the distribution.
 
-![Inquiry Frequency Analysis](/Images/inq_last_6mths.jpg)
+<img src="/Images/inq_last_6mths.jpg" width="50%" />
 
 ### 2.7 Handling Missing Values (Imputation)
 * **Delinquency & Records:** For `mths_since_last_delinq` and `mths_since_last_record`, NULL values were replaced with `999`. This tells the model these borrowers have **no history** of delinquency.
