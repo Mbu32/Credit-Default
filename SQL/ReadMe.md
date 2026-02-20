@@ -24,15 +24,15 @@ The data showed that having even one public record significantly increases defau
 
 ![Public Record Default Analysis](/Images/pub_rec.jpg)
 
-### 2.5 Total Accounts (`total_acc`)
-Analysis revealed that default rates stagnate around 20% once a borrower has more than 50 accounts. To handle outliers and focus on the most dense part of the distribution, I capped this value at 50.
+### 2.5 Open Credit Lines (`open_acc`)
+I analyzed the number of open credit lines to determine the relationship between account volume and default risk. This helps the model understand the borrower's current credit utilization and management.
 
-![Total Accounts Outlier Analysis](/Images/total_acc.jpg)
+![Open Accounts Analysis](/Images/open_acc.jpg)
 
 ### 2.6 Credit Inquiries (`inq_last_6mths`)
 Excessive inquiries are a sign of credit hunger. Values above 6 are extreme outliers with low sample sizes, so I capped this at 6 to reduce "noise" in the tail end of the distribution.
 
-![Inquiry Frequency Analysis](/Images\inq_last_6mths.jpg) 
+![Inquiry Frequency Analysis](/Images/inq_last_6mths.jpg)
 
 ### 2.7 Handling Missing Values (Imputation)
 * **Delinquency & Records:** For `mths_since_last_delinq` and `mths_since_last_record`, NULL values were replaced with `999`. This tells the model these borrowers have **no history** of delinquency.
