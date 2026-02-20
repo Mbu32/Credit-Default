@@ -22,17 +22,17 @@ To allow the model to learn the difference between "Good" and "Bad" loans, I cre
 ### 2.4 Public Records (`pub_rec`)
 The data showed that having even one public record significantly increases default probability. I converted this into a **Binary Flag** (0/1) to simplify the model's input.
 
-![Public Record Default Analysis](images/pub_rec.jpg)
+![Public Record Default Analysis](/Images/pub_rec.jpg)
 
 ### 2.5 Total Accounts (`total_acc`)
 Analysis revealed that default rates stagnate around 20% once a borrower has more than 50 accounts. To handle outliers and focus on the most dense part of the distribution, I capped this value at 50.
 
-![Total Accounts Outlier Analysis](images/total_acc.jpg)
+![Total Accounts Outlier Analysis](/Images/total_acc.jpg)
 
 ### 2.6 Credit Inquiries (`inq_last_6mths`)
 Excessive inquiries are a sign of credit hunger. Values above 6 are extreme outliers with low sample sizes, so I capped this at 6 to reduce "noise" in the tail end of the distribution.
 
-![Inquiry Frequency Analysis](images/inq_last_6mths.jpg)
+![Inquiry Frequency Analysis](/Images\inq_last_6mths.jpg) 
 
 ### 2.7 Handling Missing Values (Imputation)
 * **Delinquency & Records:** For `mths_since_last_delinq` and `mths_since_last_record`, NULL values were replaced with `999`. This tells the model these borrowers have **no history** of delinquency.
