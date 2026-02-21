@@ -17,5 +17,17 @@ Develop and compare classification models for credit default prediction, with em
 ### Dataset
 - [Lending Club Loan Data](https://www.kaggle.com/datasets/adarshsng/lending-club-loan-data-csv) (2020)
 - Despites it's decription has been updated to be data only from 2020.
-- This company is a peer-to-peer lending corp based in the US that is active til now.
+- This company is a peer-to-peer lending corp based in the US that is still currently active.
+
+### Initial Data Engineering & Feature Pruning (SQL Pipeline)
+
+Preprocessing was conducted in SQL prior to modeling.
+
+- Reduced dataset from **144 columns → 91 columns**
+- Removed redundant and post-outcome leakage variables  
+- Standardized feature formats  
+- Documented rationale for each pruning decision
+
+Full SQL workflow can be checked here with details on every step: [SQL](https://github.com/Mbu32/Data-Analysis/tree/a5d0f93a8ba6a3a7d62020c47d289a1080efbb36/SQL)
+
 
