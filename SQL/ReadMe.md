@@ -43,13 +43,13 @@ Excessive recent inquiries are a strong indicator of "credit hunger" or financia
 * **Consolidation Flag:** Created a binary `is_consolidation` flag via keyword search in the loan `title`. Debt consolidation carries a specific, elevated risk profile compared to other loan types.
 * **Purpose Tiers:** Grouped the 14+ `purpose` categories into three hierarchical tiers (1 = Low Risk, 2 = Medium Risk, 3 = High Risk) based on observed historical default rates, significantly reducing categorical noise.
 
-<img src="/Images/purpose_tiers.jpg" width="70%" alt="Loan Purpose Tiers Analysis" />
+<img src="/Images/purpose.jpg" width="70%" alt="Loan Purpose Tiers Analysis" />
 
 ### 2.12 & 2.13 Credit Grading & Employment
 * **Numeric Conversion:** Stripped text from `term` and `emp_length` to convert them into pure numeric formats (e.g., '10+ years' -> 10.0, '< 1 year' -> 0.5).
 * **Sub-Grade Mapping:** Converted alphanumeric `sub_grade` into a continuous `sub_grade_num` (1-35) and `grade` to (1-7). This allows the model to interpret credit rank as a linear progression of risk. As seen below, the default rate increases almost linearly as the grade drops.
 
-<img src="/Images/sub_grade_analysis.jpg" width="70%" alt="Sub-Grade Linear Default Progression" />
+<img src="/Images/grade.jpg" width="70%" alt="Sub-Grade Linear Default Progression" />
 
 ### 2.8 & 2.16 Data Leakage Prevention
 To ensure the model does not "cheat" by looking at future events, I strictly removed all **post-origination** features. 
