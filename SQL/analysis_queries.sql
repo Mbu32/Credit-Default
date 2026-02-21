@@ -171,3 +171,145 @@ SET is_consolidation = CASE
 END;
 
 ALTER TABLE dbo.loan_model_ready DROP COLUMN title;
+
+
+--2.12
+update dbo.loan_model_ready
+SET term = TRIM(replace(term,'months',''))
+
+ALTER table dbo.loan_model_ready
+alter column term INT;
+
+
+
+update dbo.loan_model_ready
+set emp_length = CASE
+when emp_length = '10+ years' then 10
+when emp_length = '< 1 year' then 0.5
+when emp_length = 'n/a' then 0
+else trim(replace(replace(emp_length, ' years', ''), ' year', ''))
+end;
+
+ALTER TABLE dbo.loan_model_ready 
+ALTER COLUMN emp_length FLOAT;
+
+
+
+--2.13
+SELECT 
+    grade, 
+    sub_grade, 
+    COUNT(*) as total_loans, 
+    AVG(CAST(is_bad AS FLOAT)) as default_rate
+FROM dbo.loan_model_ready
+GROUP BY grade, sub_grade
+ORDER BY grade, sub_grade;
+
+
+update dbo.loan_model_ready
+SET grade = CASE 
+    WHEN grade = 'A' THEN 1
+    WHEN grade = 'B' THEN 2
+    WHEN grade = 'C' THEN 3
+    WHEN grade = 'D' THEN 4 
+    WHEN grade = 'E' THEN 5 
+    WHEN grade = 'F' THEN 6 
+    WHEN grade = 'G' THEN 7 
+end;
+
+
+ALTER TABLE dbo.loan_model_ready ADD sub_grade_num INT;
+
+UPDATE dbo.loan_model_ready
+SET sub_grade_num = (
+    CASE LEFT(sub_grade, 1)
+        WHEN 'A' THEN 0 WHEN 'B' THEN 5 WHEN 'C' THEN 10 
+        WHEN 'D' THEN 15 WHEN 'E' THEN 20 WHEN 'F' THEN 25 WHEN 'G' THEN 30
+    END + CAST(RIGHT(sub_grade, 1) AS INT)
+);
+
+ALTER TABLE dbo.loan_model_ready DROP COLUMN sub_grade;
+
+
+--2.14
+
+SELECT 
+    purpose, 
+    COUNT(*) as total_loans, 
+    AVG(CASTpredictor AS FLOAT)) as default_rate
+FROM dbo.loan_model_ready
+GROUP BY purpose
+ORDER BY total_loans DESC;
+
+Update dbo.loan_model_ready
+set purpose = CASE
+when purpose in ('small_ready', 'renewable_energy','moving') then 3
+when purpose in ('medical','house','debt_consolidation','other','educational','vacation') then 2
+else 1
+end;
+
+ALTER TABLE dbo.loan_model_ready 
+ALTER COLUMN purpose INT;
+
+
+--2.15
+
+UPDATE dbo.loan_model_ready
+SET mths_since_last_major_derog = ISNULL(mths_since_last_major_derog, 999),
+    mths_since_recent_bc_dlq    = ISNULL(mths_since_recent_bc_dlq, 999),
+    mths_since_recent_inq       = ISNULL(mths_since_recent_inq, 999),
+    mths_since_recent_revol_delinq = ISNULL(mths_since_recent_revol_delinq, 999);
+
+
+
+--2.16
+
+ALTER TABLE dbo.loan_model_ready 
+DROP COLUMN 
+    revol_bal_joint, sec_app_earliest_cr_line, sec_app_inq_last_6mths, 
+    sec_app_mort_acc, sec_app_open_acc, sec_app_revol_util, 
+    sec_app_open_act_il, sec_app_num_rev_accts, sec_app_chargeoff_within_12_mths, 
+    sec_app_collections_12_mths_ex_med, sec_app_mths_since_last_major_derog, 
+    hardship_flag, hardship_type, hardship_reason,hardship_status,deferral_term,
+    hardship_amount,hardship_start_date,hardship_end_date,payment_plan_start_date,
+    hardship_length,hardship_dpd,hardship_loan_status,orig_projected_additional_accrued_interest;
+
+alter table dbo.loan_model_ready
+drop column hardship_payoff_balance_amount,hardship_last_payment_amount,
+debt_settlement_flag_date,settlement_status,settlement_date,
+settlement_amount,settlement_percentage,settlement_term,disbursement_method,debt_settlement_flag;
+
+--2.17
+update dbo.loan_model_ready
+SEt verification_status = 'Verified' where verification_status='Source Verified'
+
+--2.18
+ALTER TABLE dbo.loan_model_ready ADD region VARCHAR(20);
+
+UPDATE dbo.loan_model_ready
+SET region = CASE 
+    -- NORTHEAST
+    WHEN addr_state IN ('CT', 'ME', 'MA', 'NH', 'RI', 'VT', 'NJ', 'NY', 'PA') THEN 'Northeast'
+    -- MIDWEST
+    WHEN addr_state IN ('IL', 'IN', 'MI', 'OH', 'WI', 'IA', 'KS', 'MN', 'MO', 'NE', 'ND', 'SD') THEN 'Midwest'
+    -- SOUTH
+    WHEN addr_state IN ('AL', 'AR', 'DE', 'DC', 'FL', 'GA', 'KY', 'LA', 'MD', 'MS', 'NC', 'OK', 'SC', 'TN', 'TX', 'VA', 'WV') THEN 'South'
+    -- WEST
+    WHEN addr_state IN ('AK', 'AZ', 'CA', 'CO', 'HI', 'ID', 'MT', 'NV', 'NM', 'OR', 'UT', 'WA', 'WY') THEN 'West'
+    ELSE 'Unknown'
+END;
+
+
+ALTER TABLE dbo.loan_model_ready DROP COLUMN addr_state;
+
+--2.19
+
+select inq_fi, count(*) as amt
+from dbo.loan_model_ready
+group by inq_fi
+
+UPDATE dbo.loan_model_ready
+SET inq_fi = ISNULL(inq_fi, 0);
+
+UPDATE dbo.loan_model_ready
+SET inq_fi = CASE WHEN inq_fi > 3 THEN 3 ELSE inq_fi END;
