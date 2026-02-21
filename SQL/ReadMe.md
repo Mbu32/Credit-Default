@@ -69,4 +69,4 @@ The final table (`dbo.loan_model_ready`) consists of clean, imputed, capped, and
 ---
 
 ## How to Run
-The full SQL transformation script, including all `ALTER`, `UPDATE`, and `CASE` logic, can be found here: [analysis_queries.sql](/SQL/analysis_queries.sql)
+The full SQL transformation script, can be found here: [analysis_queries.sql](/SQL/analysis_queries.sql)
