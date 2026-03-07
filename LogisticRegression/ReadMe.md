@@ -81,7 +81,35 @@ Heatmap too large to add, but for our final VIF check:
 
 With the respective heatmap (much smaller now)
 
-!['Heatmap'](Images_log/corr_heatmap2.png)
+!['Heatmap'](..\Images_log\corr_heatmap2.png)
+
+[For detailed feature engineering methodology, see the **Feature Engineering Details** section below](..\docs\feature_engineering_details.md)
 
 
-[For detailed feature engineering methodology, see the **Feature Engineering Details** section below](docs/feature_engineering_details.md)
+## 6 Outlier Analysis
+
+We plotted our (normalized) features to verify if we had any really big outliers. We found almost a tenth of features did display features that were >40 standard deviations away. While instances that contain these outliers could be the key for our model predictions, at a certain point, they simply distract our model. Instead of removing outliers, we winsorized them to our upper / lower bounds of 0.99 & 0.01 respectively.
+
+
+we plotted 10 features in each plot
+Sample plot:
+
+!['Feature Distribution'](..\Images_log\boxplot_features.png)
+
+## 7. Cohen's D & Confidence Intervals
+
+Looking at our top 4 features:
+
+|Feature | Cohens d |  CI, (lower,Upper) | mean difference (default-paid)|
+| :--- | :--- |:---|:---
+|**term** |0.44  |   4.3, 4.64 |4.47|
+|**dti**|0.27| 2.13, 2.39|2.26|
+|**acc_open_past_24mths**| 0.25| 0.69, 0.79|0.74|
+|**tot_hi_cred_lim** |0.19|-32305.8, -28001.1| -30153.45|
+
+      0.22   -3080.43, -2737.1                        -2908.77
+Term: On average, borrowers who default are taking out loans that are 4.4 months LONGER than borrowers who pay back.
+
+DTI: defaulters have a debt to income ratio that is 2.27 higher, this tells us they are already financially stretched thin before said loan.
+
+tot_hi_cred_lim: Because it's negative, it means the Paid group is higher. Borrowers who successfully pay off their loans have, on average, ~$30,150 MORE in total high credit limits than people who default.
