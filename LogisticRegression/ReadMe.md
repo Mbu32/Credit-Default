@@ -50,3 +50,23 @@ Activity Ratio = num_actv_rev_tl / num_op_rev_tl
 
 where num_actv_rev_tl is number of currently active revolving trades
 and num_op_rev_tl is number of open revolving accounts
+
+
+
+
+## 5. VIF check
+
+Now I began to diagnose, checking columns that had a high VIF. This tells us whether or not columns were adding anything or simply repeating the information already present in other columns.
+
+I used a combination of Mutual Information, linear correlation with target, and lastly a Correlation Heatmap.
+
+When I find a column with high VIF I check our heatmap to see what column most correlates with the problematic one then I move on to correlation with target. 
+
+ex. 
+
+| Feature | VIF | Corr with Target | Mutual Information
+| :--- | :--- |:---|:---
+| **missingindicator_mths_since_last_record** | 824.647813|0.029706| 0.014045|
+| **pct_tl_nvr_dlq** | 320.689288 |0.014923| 0.003169|
+| **num_sats** |256.721724 | 0.026935| 0.002837|
+
