@@ -81,7 +81,7 @@ Heatmap too large to add, but for our final VIF check:
 
 With the respective heatmap (much smaller now)
 
-['Heatmap'](..\Images_log\corr_heatmap2.png)
+['Heatmap'](Images_log/corr_heatmap2.png)
 
 
-[For detailed feature engineering methodology, see the **Feature Engineering Details** section below](..\docs\feature_engineering_details.md)
+[For detailed feature engineering methodology, see the **Feature Engineering Details** section below](docs/feature_engineering_details.md)
