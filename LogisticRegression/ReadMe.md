@@ -62,7 +62,7 @@ I used a combination of Mutual Information, linear correlation with target, and 
 
 When I find a column with high VIF I check our heatmap to see what column most correlates with the problematic one then I move on to correlation with target. 
 
-ex. 
+Sample from our initial VIF:
 
 | Feature | VIF | Corr with Target | Mutual Information
 | :--- | :--- |:---|:---
@@ -70,3 +70,15 @@ ex.
 | **pct_tl_nvr_dlq** | 320.689288 |0.014923| 0.003169|
 | **num_sats** |256.721724 | 0.026935| 0.002837|
 
+Heatmap too large to add, but for our final VIF check:
+
+| Feature | VIF | Corr with Target | Mutual Information
+| :--- | :--- |:---|:---
+|**bc_util**|  25.310456|0.071276|0.004328|
+|**has_il_history**|  20.112435|0.016097  |0.012967|
+|**term** | 19.207303|0.174618|0.021245 |
+|**activity_ratio**  |17.793271|0.060687|0.003632|
+
+With the respective heatmap (much smaller now)
+
+['Heatmap']('Images_log\corr_heatmap2.png')
