@@ -94,7 +94,7 @@ We plotted our (normalized) features to verify if we had any really big outliers
 we plotted 10 features in each plot
 Sample plot:
 
-!['Feature Distribution'](..\Images_log\boxplot_features.png)
+!['Feature Distribution'](/Images_log/boxplot_features.png)
 
 ##  Cohen's D & Confidence Intervals
 
@@ -147,7 +147,7 @@ After hypertuning parameters through Optuna, we got very similar results
 
 As a final check I produced a learning curve
 
-!['Learning Curve'](..\Images_log\LearningCurve_Log.png)
+!['Learning Curve'](/Images_log/LearningCurve_Log.png)
 
 We can see the inital difference with minimal samples the difference was already 0.01 AUC score with a final difference of ~0.0005. Keep in mind that our Cross validation score didnt seem to be hitting an elbow of any sort and adding more instances could have helped the model but differences would have been trivial and franlky unneccessary. 
 
@@ -156,11 +156,11 @@ We can see the inital difference with minimal samples the difference was already
 
 Firstly we have our Weight plot to put into persepctive how much each feature was contributing to the end model
 
-!['Weight Plot'](..\Images_log\LogisticRegression_feature_weight.png)
+!['Weight Plot'](/Images_log/LogisticRegression_feature_weight.png)
 
 and to give more context its respective effect on instances
 
-!['Effect Plot'](..\Images_log\Logreg_effectplot.png)
+!['Effect Plot'](/Images_log/Logreg_effectplot.png)
 
 
 
