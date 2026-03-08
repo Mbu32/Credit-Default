@@ -166,7 +166,7 @@ and to give more context its respective effect on instances
 
 Before wrapping up our base model I ran a multivariate analysis (using statsmodels.api) to confirm statistical significance of our model and hence our features with the following results:
 
-LLR - p-valesu: 0.0000
+LLR - p-values: 0.0000
 
 Telling us our model was indeed statistically significant
 

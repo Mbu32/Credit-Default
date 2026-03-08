@@ -29,4 +29,16 @@ Preprocessing was conducted in SQL prior to modeling.
 
 Full SQL workflow can be checked here with details on every step: [SQL](https://github.com/Mbu32/Data-Analysis/tree/a5d0f93a8ba6a3a7d62020c47d289a1080efbb36/SQL)
 
+### Base model and Results
 
+After running through a full EDA, outlier, winsorizing, feature and model significance, Model hypertuning and CV I ended up with this result for our logistic model:
+
+|Fold 1| Fold 2|Fold 3| Fold 4| Fold 5|
+| :--- | :--- |:---|:---|:---
+|0.69950638|  0.70659691|0.70082593| 0.70390687|0.70252757|
+
+|Mean|Standard Deviation|
+| :--- | :--- 
+|0.7026|  0.0024|
+
+All details and results can be seen in more detail [Here](/LogisticRegression/ReadMe.md)
