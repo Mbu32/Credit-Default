@@ -16,8 +16,8 @@ Develop and compare classification models for credit default prediction, with em
 
 ### Dataset
 - [Lending Club Loan Data](https://www.kaggle.com/datasets/adarshsng/lending-club-loan-data-csv) 
-- Despite it's decription has been updated to be data only from 2020.
-- This company is a peer-to-peer lending corp based in the US that is still currently active.
+- Real world data from 2020.
+- This company is a peer-to-peer lending corp based in the US that is currently active.
 
 ### Initial Data Engineering & Feature Pruning (SQL Pipeline)
 
