@@ -35,7 +35,7 @@ Before moving to complex non-linear models, I established a baseline using Logis
 
 ### Model Performance with 5 Fold Cross-Validation
 
-The model was tuned using Optuna to find the optimal balance of L1 and L2 penalties ($l1\_ratio \approx 0.69$). I had a significantly low standard deviation, suggesting the model has generalized decently well.
+The model was tuned using Optuna to find the optimal balance of L1 and L2 penalties ($l1\_{ratio} \approx 0.69$). I had a significantly low standard deviation, suggesting the model has generalized decently well.
 
 | Fold 1 | Fold 2 | Fold 3 | Fold 4 | Fold 5 |
 | :--- | :--- | :--- | :--- | :--- |
