@@ -195,40 +195,6 @@ ALTER COLUMN emp_length FLOAT;
 
 
 
---2.13
-SELECT 
-    grade, 
-    sub_grade, 
-    COUNT(*) as total_loans, 
-    AVG(CAST(is_bad AS FLOAT)) as default_rate
-FROM dbo.loan_model_ready
-GROUP BY grade, sub_grade
-ORDER BY grade, sub_grade;
-
-
-update dbo.loan_model_ready
-SET grade = CASE 
-    WHEN grade = 'A' THEN 1
-    WHEN grade = 'B' THEN 2
-    WHEN grade = 'C' THEN 3
-    WHEN grade = 'D' THEN 4 
-    WHEN grade = 'E' THEN 5 
-    WHEN grade = 'F' THEN 6 
-    WHEN grade = 'G' THEN 7 
-end;
-
-
-ALTER TABLE dbo.loan_model_ready ADD sub_grade_num INT;
-
-UPDATE dbo.loan_model_ready
-SET sub_grade_num = (
-    CASE LEFT(sub_grade, 1)
-        WHEN 'A' THEN 0 WHEN 'B' THEN 5 WHEN 'C' THEN 10 
-        WHEN 'D' THEN 15 WHEN 'E' THEN 20 WHEN 'F' THEN 25 WHEN 'G' THEN 30
-    END + CAST(RIGHT(sub_grade, 1) AS INT)
-);
-
-ALTER TABLE dbo.loan_model_ready DROP COLUMN sub_grade;
 
 
 --2.14
