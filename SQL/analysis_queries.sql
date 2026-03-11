@@ -279,3 +279,16 @@ SET inq_fi = ISNULL(inq_fi, 0);
 
 UPDATE dbo.loan_model_ready
 SET inq_fi = CASE WHEN inq_fi > 3 THEN 3 ELSE inq_fi END;
+
+
+
+--2.20
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'loan'
+AND COLUMN_NAME LIKE '%int%';
+
+SELECT AVG(int_rate) AS average_int_rate 
+FROM dbo.loan;
