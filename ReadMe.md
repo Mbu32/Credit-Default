@@ -73,7 +73,6 @@ I've added the Effect plot to show priority our model put on features rather tha
 
 For a more detailed breakdown of all steps taken and all logic behind steps, **[Read Here](/LogisticRegression/ReadMe.md)**
 
----
 
 ---
 
@@ -100,6 +99,9 @@ Slight overfitting observed (train ~0.76, CV ~0.72) with both curves plateauing,
 
 
 ![alt text](Trees/Images_trees/Global_featureImpact.png)
+
+Each dot represents one borrower. Position on the x-axis shows how much that feature pushed the prediction toward default (right) or away (left). Color indicates whether the feature value was high (red) or low (blue).
+
 ### Threshold Optimization
 
 Rather than using the default 0.5 threshold, an expected value framework was applied using actual loan amounts and interest rates from the dataset.
