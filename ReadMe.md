@@ -1,7 +1,17 @@
 # Applied Data Analysis & Statistical Modeling Projects
 
-This repsitory contains an applied (end-to-end) project demonstrating SQL data pulling/cleaning, statistical reasoning, feature engineering, inference modelling, model diagnostics and interpreation of a real world dataset.
-Drawing on my background in mathematics, statistics, and finance, these end-to-end projects will apply Python and machine learning techniques with an emphasis on interpratibilty.
+This repository contains an applied (end-to-end) project demonstrating SQL data 
+pulling/cleaning, statistical reasoning, feature engineering, inference modelling, 
+model diagnostics and interpretation of a real world dataset. Drawing on my 
+background in mathematics, statistics, and finance, this project applies Python 
+and machine learning techniques with an emphasis on interpretability and 
+business impact.
+
+The project culminates in a simulated A/B test comparing the industry standard 
+decision threshold (0.5) against a data driven optimized threshold (0.206), 
+using a held-out 90% of the dataset as the test population. The goal is to 
+quantify the real world net value of threshold optimization in a credit 
+risk context.
 
 ---
 ## 1. Credit Card Default Risk Modeling
