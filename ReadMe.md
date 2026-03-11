@@ -81,7 +81,7 @@ I've added the Effect plot to show priority our model put on features rather tha
 
 ---
 
-For a more detailed breakdown of all steps taken and all logic behind steps, **[Read Here](/LogisticRegression/ReadMe.md)**
+For a more detailed breakdown of all steps taken and all logic behind steps, **[Full Logistic Regression Breakdown →](/LogisticRegression/ReadMe.md)**
 
 
 ---
