@@ -24,4 +24,22 @@ The model still performs generally well considering human patterns can be extrem
 
 As a sidenote, comparing to other models on Kaggle, I was concerned maybe I was missing out on something but nope, my models pretty close to top models without using ANN's.
 
+---
 
+### Finding Optimal Threshold
+
+![ROC plus RecallxPrecision](Images_trees/roc_prc.png)
+
+Through these plots we can see how our training data performs and attempt to visualize a best case threshold
+
+after calculating the arg max best F1 we found a threshold of 0.206 to be most optimal where:
+
+| Threshold     | Precision     | Recall        | F1           | 
+| :--- | :--- | :--- | :--- | 
+|0.190|        0.318|        0.684|        0.434|       
+|0.206|        0.332 |       0.637  |      0.437   |    
+|0.250|        0.369  |      0.513    |    0.429      | 
+|0.300|        0.415   |     0.392      |  0.403| 
+|0.350 |       0.457 |       0.289 |       0.354 |      
+|0.400  |      0.499   |     0.207    |    0.293     |  
+|0.500  |      0.572    |    0.091      |  0.157 | 
