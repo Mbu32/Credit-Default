@@ -72,3 +72,81 @@ I've added the Effect plot to show priority our model put on features rather tha
 ---
 
 For a more detailed breakdown of all steps taken and all logic behind steps, **[Read Here](/LogisticRegression/ReadMe.md)**
+
+---
+
+---
+
+## Second Phase — CatBoost (Non-Linear Tree Ensemble)
+
+To capture non-linear patterns and feature interactions that logistic regression cannot model, I used a CatBoost classifier. Rather than applying VIF or linear feature selection upfront, all features were retained and SHAP values were used post training to find and prune out non-performing features.
+
+### Model Selection & Tuning
+
+Three gradient boosting models were benchmarked via 3-fold stratified cross-validation:
+
+| Model | Mean AUC |
+| :--- | :--- |
+| CatBoost | 0.703 |
+| LightGBM | 0.700 |
+| XGBoost | 0.698 |
+
+CatBoost was selected and hypertuned via Optuna (50 trials) with early stopping, giving us a final cross-validated AUC of **0.718**.
+
+### Learning Curve
+
+![Learning Curve](Images_trees/LearningCurve_CatBoost.png)
+
+Slight overfitting observed (train ~0.76, CV ~0.72) with both curves plateauing, additional data would not improve performance.
+
+### Threshold Optimization
+
+Rather than using the default 0.5 threshold, an expected value framework was applied using actual loan amounts and interest rates from the dataset.
+
+| Threshold | Precision | Recall | F1 | Flagged |
+| :--- | :--- | :--- | :--- | :--- |
+| 0.206 | 0.332 | 0.637 | 0.437 | 38.5% |
+| 0.250 | 0.369 | 0.513 | 0.429 | 27.9% |
+| 0.300 | 0.415 | 0.392 | 0.403 | 19.0% |
+| 0.500 | 0.572 | 0.091 | 0.157 | 3.2% |
+
+| Threshold | Net Value |
+| :--- | :--- |
+| 0.206 | $105,678,761 |
+| 0.300 | $74,264,002 |
+| 0.500 | $3,579,880 |
+
+> The optimal threshold of **0.206** produces **26x more net value** than the standard 0.5, by prioritizing defaulter detection over false alarm minimization.
+
+> Depending on operational review capacity, 0.300 (19% flagged, $74M net value) may be more practical to use.
+
+### SHAP Interpretability
+
+Feature importance was validated through SHAP analysis, confirming that top features act as **independent signals** (dendrogram distances > 0.2) with clear non-linear relationships, particularly `median__bc_util` which shows near-zero impact below 80% utilization followed by a sharp risk spike.
+
+### Test Set Results — Threshold 0.206
+
+| Test AUC | Train AUC (CV) | Difference |
+| :--- | :--- | :--- |
+| 0.715 | 0.718 | 0.003 |
+
+| Metric | No Default | Default |
+| :--- | :--- | :--- |
+| Precision | 0.88 | 0.33 |
+| Recall | 0.67 | 0.64 |
+| F1 | 0.76 | 0.44 |
+
+The model catches **64% of defaulters** on unseen data. When approving a borrower, the model is correct **88% of the time**. A test AUC difference of 0.003 confirms strong generalization.
+
+**[Full CatBoost Breakdown →](/TreeModels/ReadMe.md)**
+
+---
+
+## Model Comparison
+
+| Model | CV AUC | Test AUC | Generalization Gap |
+| :--- | :--- | :--- | :--- |
+| Logistic Regression | 0.703 | — | — |
+| CatBoost (tuned) | 0.718 | 0.715 | 0.003 |
+
+CatBoost outperforms the logistic regression baseline by **+0.015 AUC**, with the additional benefit of capturing non-linear patterns and providing SHAP based interpretability suitable for a risk management context.
