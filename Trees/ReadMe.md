@@ -64,21 +64,41 @@ While 0.206 maximizes F1 and net value, it flags 38.5% of applicants. Depending 
 
 ### Interpretations of our Model using SHAP
 
+To determine which features drove the model's predictions on a global scale, I calculated the Mean Absolute SHAP values across the dataset. The SHAP values represent the impact of a feature on the model's output in log-odds. I also pruned out 28 features that we're not contributing, after rerunning our model (with cross validation) we saw a ~0.001 drop in AUC, not a bad deal!
 
-After running our SHAP and finding Mean Absolute SHAP values, we've pruned out 28 features that we're not contributing, after rerunning our model (with cross validation) we saw a ~0.001 drop in AUC, not a bad deal!
+Bar Plot of mean Absolute SHAP Values
+![Mean Absolute SHAP value](Images_trees/SHAP_bar.png)
+Key Drivers of Default Risk:
+
+Loan Term (remainder__term): This is by far the strongest feature. On average, the length of the loan swung the model's prediction by 0.3 log-odds. In credit risk, a 60-month term inherently carries much more uncertainty than a 36-month term, and the model heavily relied on it!
+
+Debt-to-Income Dynamics (FE_loan_to_income & remainder__dti): The custom feature I engineered (FE_loan_to_income) outperformed the base DTI metric, this is a good proof that our feature engineering was fruitful! Together, a borrower's raw capacity to take on more debt was definitely  a strong predictor.
+
+Recent Credit Seeking (median__acc_open_past_24mths): The model assigns significant weight to how many new accounts a borrower opened in the last two years. A sudden spike in new credit lines is an indicator of financial distress.
+
+An extra plot:
+![alt text](Images_trees/Global_featureImpact.png)
+
+It shows three things at once: Importance (Y-axis), magnitude (X-axis), and Directionality (Color). It proves that High (red) Terms lead to Positive (risky) SHAP values.
+
+## A quick check of correlation
+
+To make sure our model wasn't splitting up significance between features, we can check here
+
+![Correlation](Images_trees/dendrogram.png)
+
+The majority of our (strongest) features we're very well independent of each other, while some definitely showed to be closer to 75% correlation.
+
+---
+
+### Interaction Terms & non-linear patterns
+
+![Interactions](Images_trees/interaction_features.png)
+
+A quick glance at how features are interacting shows that there are very weak interactions for our top 10 features.
 
 
-Our top 10 features being:
+However, we can now show why we chose non linear methods and its for this reason:
+![non](Images_trees/nonlinear.png)
 
-|Feature | Mean Absolute SHAP|
-| :--- | :--- |
-|term          |  0.303660|
-|loan_to_income|            0.185780|
-|acc_open_past_24mths    |        0.124888|
-|dti        |    0.115023|
-|bc_open_to_buy   |         0.089766|
-|percent_bc_gt_75 |           0.072230|
-|all_util          |  0.069582|
-|tot_hi_cred_lim   |         0.068780 |
-|is_consolidation       |     0.062240|
-|mths_since_recent_inq  |          0.060376|
+As you can see, a pure linear model would NOT catch a pattern like this. We can see how Bank Card utility is being assessed by our model, those with high (85%>) card utility (median__bc_util) had a significantly higher risk to them than those below that region and we can again see higher risk with those with no utility as well.
