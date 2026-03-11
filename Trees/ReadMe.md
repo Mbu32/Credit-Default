@@ -16,7 +16,7 @@ To begin, we placed three models XGboost, LGBM, and lastly Catboost (tree based 
 
 We then moved on to Hypertune our base model via Optuna and then finished off with a Learning Curve
 
-![Learning Curve](Images_trees\LearningCurve_CatBoost.png)
+![Learning Curve](Images_trees/LearningCurve_CatBoost.png)
 
 What we can see is that our model definitely has some slight overfitting where the gap of our training curve is sitting at ~0.76 and CV sitting at ~0.72, both curves have also flattened at the end so that tells us that more data won't be helping out.
 
@@ -34,12 +34,13 @@ Through these plots we can see how our training data performs and attempt to vis
 
 after calculating the arg max best F1 we found a threshold of 0.206 to be most optimal where:
 
-| Threshold     | Precision     | Recall        | F1           | 
-| :--- | :--- | :--- | :--- | 
-|0.190|        0.318|        0.684|        0.434|       
-|0.206|        0.332 |       0.637  |      0.437   |    
-|0.250|        0.369  |      0.513    |    0.429      | 
-|0.300|        0.415   |     0.392      |  0.403| 
-|0.350 |       0.457 |       0.289 |       0.354 |      
-|0.400  |      0.499   |     0.207    |    0.293     |  
-|0.500  |      0.572    |    0.091      |  0.157 | 
+| Threshold| Precision| Recall| F1| Amount Flagged| Percentage Flagged
+| :--- | :--- | :--- | :--- | :--- | :---|
+|0.190|        0.318|        0.684|        0.434|45,153|43.2% of applicants  |     
+|0.206|        0.332 |       0.637  |      0.437|40,267|38.5% of applicants |
+|0.250|        0.369  |      0.513    |    0.429|29,169|27.9% of applicants|
+|0.300|        0.415   |     0.392      |  0.403|19,839|19.0% of applicants |
+|0.350 |       0.457 |       0.289 |       0.354|13,281|12.7% of applicants  |   
+|0.400  |      0.499   |     0.207    |    0.293|8,720|8.3% of applicants   |
+|0.500  |      0.572    |    0.091      |  0.157|3,333|3.2% of applicants  |
+
