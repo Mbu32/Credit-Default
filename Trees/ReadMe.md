@@ -5,24 +5,21 @@ This part of the project attempts to maximize accuracy by finding patterns and i
 ---
 ### Preprocessing
 
-I kept the same preprocessing except when it came to dropping columns. We used VIF and univariate methods to find significance/non-signficance with features but these were simply linear methods. I chose to keep all columns and let our tree model do the work and then plotting SHAP values and other methods listed later to ascertain whether or not we will drop features or not!
-
+For this phase, I adjusted my feature selection. In the linear baseline, we used VIF and univariate methods to drop highly collinear or linearly insignificant features. We now shift because tree based models natively handle collinearity and discover non-linear relationships, I chose to instead to model a wider feature set. I'll let the algorithm do the heavy lifting, and then use SHAP (Shapley Additive Explanations) post-training to prune unhelpful features.
 
 ---
 
 ### Base models + hypertune and Learning Curve
 
-To begin, we placed three models XGboost, LGBM, and lastly Catboost (tree based models) and cross validate their scored with 3 stratified folds. CatBoost had the highest average AUC with 0.703.
+To establish our new baseline, I placed three models XGboost, LGBM, and lastly Catboost (tree based models) and cross validate their scored with 3 stratified folds. CatBoost had the highest average AUC with 0.703.
 
-We then moved on to Hypertune our base model via Optuna and then finished off with a Learning Curve
+After selecting CatBoost, I optimized its hyperparameters using Optuna and plotted a Learning Curve to check for data saturation and overfitting:
 
 ![Learning Curve](Images_trees/LearningCurve_CatBoost.png)
 
-What we can see is that our model definitely has some slight overfitting where the gap of our training curve is sitting at ~0.76 and CV sitting at ~0.72, both curves have also flattened at the end so that tells us that more data won't be helping out.
+Observations: The model exhibits slight overfitting, with the training curve falling around ~0.76 AUC and the cross-validation curve at ~0.72 AUC. Both curves have flattened out, telling us that simply adding more training data of the same type will not significantly improve performance. Given the high degree of noise that can undoubtedly be found in real world data, our performance aligns closely with other benchmarks for this dataset without resorting to more complex methods (ANN's).
 
-The model still performs generally well considering human patterns can be extremely hard to predict.
-
-As a sidenote, comparing to other models on Kaggle, I was concerned maybe I was missing out on something but nope, my models pretty close to top models without using ANN's.
+Comparable tries with this dataset can be found on [here](https://www.kaggle.com/code/faressayah/lending-club-loan-defaulters-prediction)
 
 ---
 
@@ -30,9 +27,7 @@ As a sidenote, comparing to other models on Kaggle, I was concerned maybe I was 
 
 ![ROC plus RecallxPrecision](Images_trees/roc_prc.png)
 
-Through these plots we can see how our training data performs and attempt to visualize a best case threshold
-
-after calculating the arg max best F1 we found a threshold of 0.206 to be most optimal where:
+A model's raw probability is useful if we know exactly where to draw the line between our decisions, that being to approve or deny applicants. I mapped the model's performance across these thresholds (as well as use our argmax function) to find optial cutoff:
 
 | Threshold| Precision| Recall| F1| Amount Flagged| Percentage Flagged
 | :--- | :--- | :--- | :--- | :--- | :---|
@@ -44,3 +39,46 @@ after calculating the arg max best F1 we found a threshold of 0.206 to be most o
 |0.400  |      0.499   |     0.207    |    0.293|8,720|8.3% of applicants   |
 |0.500  |      0.572    |    0.091      |  0.157|3,333|3.2% of applicants  |
 
+While **0.206** is the mathematical optimum score for F1, metric don't tell us the whole story so I translated that to dollar values and show their financial impact:
+
+|Threshold |   Expected Loss |       Expected Gain   |     Net Value |          
+| :--- | :--- | :--- | :--- |
+|0.190 |       $115,222,627  |       $223,082,557  |       $107,859,930|        
+|0.206 |       $116,313,212  |       $221,991,973  |       $105,678,761|        
+|0.250 |       $122,902,276  |       $215,402,909  |       $92,500,634 |        
+|0.300 |       $132,020,591  |       $206,284,593  |       $74,264,002 |        
+|0.350 |       $142,279,452  |       $196,025,733  |       $53,746,281 |        
+|0.400 |       $151,831,294  |       $186,473,891  |       $34,642,597 |        
+|0.500 |       $167,362,652  |       $170,942,532  |       $3,579,880  |
+
+While 0.206 maximizes F1 and net value, it flags 38.5% of applicants. Depending on actual capacity, 0.300 (19% flagged, $74M net value) might be more realistic.
+
+
+> **Assumptions**  
+- Loss Given Default: 60% of loan amount
+- Lost interest revenue: average loan x average interest rate
+- These are estimates, actual Losses will vary of course 
+
+---
+
+
+### Interpretations of our Model using SHAP
+
+
+After running our SHAP and finding Mean Absolute SHAP values, we've pruned out 28 features that we're not contributing, after rerunning our model (with cross validation) we saw a ~0.001 drop in AUC, not a bad deal!
+
+
+Our top 10 features being:
+
+|Feature | Mean Absolute SHAP|
+| :--- | :--- |
+|term          |  0.303660|
+|loan_to_income|            0.185780|
+|acc_open_past_24mths    |        0.124888|
+|dti        |    0.115023|
+|bc_open_to_buy   |         0.089766|
+|percent_bc_gt_75 |           0.072230|
+|all_util          |  0.069582|
+|tot_hi_cred_lim   |         0.068780 |
+|is_consolidation       |     0.062240|
+|mths_since_recent_inq  |          0.060376|
