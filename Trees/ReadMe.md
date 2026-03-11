@@ -81,13 +81,14 @@ An extra plot:
 
 It shows three things at once: Importance (Y-axis), magnitude (X-axis), and Directionality (Color). It proves that High (red) Terms lead to Positive (risky) SHAP values.
 
-## A quick check of correlation
+## A quick check on correlation between features:
 
-To make sure our model wasn't splitting up significance between features, we can check here
+Tree models can split importance between highly correlated variables. To make sure our SHAP values were representing true feature impact, I plotted a hierarchical clustering dendrogram.
 
 ![Correlation](Images_trees/dendrogram.png)
 
-The majority of our (strongest) features we're very well independent of each other, while some definitely showed to be closer to 75% correlation.
+The clustering confirms that the majority of our strongest predictive features are highly independent of each other. While a few lower-tier features showed correlations closer to 75%, our primary features are independent!!!!!!!!!
+
 
 ---
 
@@ -102,3 +103,60 @@ However, we can now show why we chose non linear methods and its for this reason
 ![non](Images_trees/nonlinear.png)
 
 As you can see, a pure linear model would NOT catch a pattern like this. We can see how Bank Card utility is being assessed by our model, those with high (85%>) card utility (median__bc_util) had a significantly higher risk to them than those below that region and we can again see higher risk with those with no utility as well.
+
+
+
+
+---
+
+### Verifying on Test Data
+
+Running our pruned and tuned (did you like the rhyme there - ahem ahem anyway) model we saw:
+
+| Test AUC | Train AUC (CV)| Difference|
+| :--- | :--- | :--- |
+|0.715|0.718| 0.003|
+
+I think I would call this a success, with unseen data our model generalized very well compared to our training data and gives us an almost identical AUC!
+
+A better view of this would be to look at our actual results via a Confusion Matrix:
+
+![matrix](Images_trees/ConfusionMatrix_test.png)
+
+
+
+With our optimal Threshold of 0.206
+
+
+| Metric | No Default | Default |
+| :--- | :--- | :--- |
+| Precision | 0.88 | 0.33 |
+| Recall | 0.67 | 0.64 |
+| F1 | 0.76 | 0.44 |
+
+The model catches **64% of defaulters** on  unseen data.
+
+The low default precision (0.33) is expected at this threshold — we are 
+purposely being as wide as possible to prioritize catching defaulters over 
+minimizing false alarms. This tradeoff is reflected in the expected value 
+analysis, where threshold 0.206 still produces the highest net value despite 
+the higher false positive rate.
+
+When the model approves a borrower (predicts no default), it is correct 
+88% of the time — meaning approved loans carry low risk.
+
+To show this tradeoff:
+
+|Threshold  |  Expected Loss |       Expected Gain     |   Net Value|           
+|:---|:---|:---|:---|
+|0.190|$28,813,505          |$55,626,474   |       $26,812,969|         
+|0.206|$29,120,272          |$55,319,707   |       $26,199,435|         
+|0.300|$33,514,824          |$50,925,154   |       $17,410,330|         
+|0.400|$38,123,641          |$46,316,337   |       $8,192,696 |         
+|0.500|$41,720,354          |$42,719,625   |       $999,271 |
+
+
+At the industry standard threshold of 0.50, net value drops to just $999,271, 
+compared to $26.2M at our optimal threshold of 0.206. This represents a much bigger improvement in net value through threshold optimization alone, without changing the model at all.
+
+> **Note**: Expected value figures reflect the test set only (~26k applicants). 
