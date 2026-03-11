@@ -93,12 +93,13 @@ Three gradient boosting models were benchmarked via 3-fold stratified cross-vali
 
 CatBoost was selected and hypertuned via Optuna (50 trials) with early stopping, giving us a final cross-validated AUC of **0.718**.
 
-### Learning Curve
+### Learning Curve & Weight Plot
 
-![Learning Curve](Images_trees/LearningCurve_CatBoost.png)
-
+![Learning Curve](Trees/Images_trees/LearningCurve_CatBoost.png)
 Slight overfitting observed (train ~0.76, CV ~0.72) with both curves plateauing, additional data would not improve performance.
 
+
+![alt text](Trees/Images_trees/Global_featureImpact.png)
 ### Threshold Optimization
 
 Rather than using the default 0.5 threshold, an expected value framework was applied using actual loan amounts and interest rates from the dataset.

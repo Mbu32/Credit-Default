@@ -160,3 +160,57 @@ At the industry standard threshold of 0.50, net value drops to just $999,271,
 compared to $26.2M at our optimal threshold of 0.206. This represents a much bigger improvement in net value through threshold optimization alone, without changing the model at all.
 
 > **Note**: Expected value figures reflect the test set only (~26k applicants). 
+
+
+
+
+
+### Individual Predictions — 
+
+To understand *why* the model makes specific decisions, we examine one individual 
+from each prediction category:
+
+---
+
+**True Positive | Actual: Default | Pred prob: 0.38**
+![trp](Images_trees/True_Positive_plot.png)
+Correctly flagged defaulter. Key risk drivers: 60-month term (+0.68), high DTI 
+of 34.58 (+0.33), and near-maximal BC utilization of 98.2% (+0.14). A textbook 
+high-risk profile the model correctly identified despite the "53 other features" 
+pushing back (-0.40).
+
+---
+
+**False Positive | Actual: No Default | Pred prob: 0.31**
+![alt text](Images_trees/False_Positive_plot.png)
+Wrongly flagged good borrower. The model was fooled by a 60-month term (+0.55), 
+large loan amount of $35,000 (+0.25), and extremely high revolving utilization 
+of 98.1% (+0.16). On paper this person looks nearly identical to a defaulter — 
+the model had no observable signal to distinguish them. This represents the 
+core precision/recall tradeoff at threshold 0.206.
+
+---
+
+**True Negative | Actual: No Default | Pred prob: 0.17**
+![alt text](Images_trees/True_Negative_plot.png)
+Correctly approved borrower. The 36-month term pushed strongly toward safe 
+(-0.22) and the "53 other features" collectively agreed (-0.04). Note that 
+`median__acc_open_past_24mths = 7` pushed toward risk (+0.18) but was 
+overwhelmed by the safe signals — the model correctly read the full picture.
+
+---
+
+**False Negative | Actual: Default | Pred prob: 0.08**
+![alt text](Images_trees/False_Negative_plot.png)
+Most critical case — a missed defaulter. Despite being a real defaulter, 
+the model assigned only 0.08 probability. The low loan-to-income ratio 
+(-0.24) and 36-month term (-0.21) dominated, masking the true risk. 
+The "53 other features" also pushed strongly toward safe (-0.34). 
+This borrower had a deceptively safe-looking profile — illustrating 
+why even an optimized threshold cannot catch all defaults.
+
+> **Key takeaway:** The False Negative case highlights the fundamental 
+> limit of any model — some defaulters are indistinguishable from safe 
+> borrowers based on available features alone. This reinforces the value 
+> of threshold optimization: by lowering to 0.206, we catch more of these 
+> borderline cases at the cost of some false alarms.
