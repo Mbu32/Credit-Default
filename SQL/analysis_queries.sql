@@ -292,3 +292,35 @@ AND COLUMN_NAME LIKE '%int%';
 
 SELECT AVG(int_rate) AS average_int_rate 
 FROM dbo.loan;
+
+-- 3.0
+
+-- Adding the flag column to our dataset
+ALTER TABLE dbo.loan_model_ready ADD split_flag VARCHAR(10);
+
+-- Flagging 10% of defaults and 10% of good loans as sample and then rest as holdout
+WITH RankedDefaults AS (
+    SELECT Loan_ID,
+           ROW_NUMBER() OVER (ORDER BY NEWID()) AS rn,
+           COUNT(*) OVER () AS total
+    FROM dbo.loan_model_ready
+    WHERE predictor = 1
+),
+RankedGood AS (
+    SELECT Loan_ID,
+           ROW_NUMBER() OVER (ORDER BY NEWID()) AS rn,
+           COUNT(*) OVER () AS total
+    FROM dbo.loan_model_ready
+    WHERE predictor = 0
+)
+UPDATE dbo.loan_model_ready
+SET split_flag = CASE
+    WHEN loan_model_ready.Loan_ID IN (
+        SELECT Loan_ID FROM RankedDefaults WHERE rn <= total * 0.10
+    ) THEN 'sample'
+    WHEN loan_model_ready.Loan_ID IN (
+        SELECT Loan_ID FROM RankedGood WHERE rn <= total * 0.10
+    ) THEN 'sample'
+    ELSE 'holdout'
+END;
+

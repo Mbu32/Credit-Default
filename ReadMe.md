@@ -131,7 +131,7 @@ Rather than using the default 0.5 threshold, an expected value framework was app
 
 > The optimal threshold of **0.206** produces **26x more net value** than the standard 0.5, by prioritizing defaulter detection over false alarm minimization.
 
-> Depending on operational review capacity, 0.300 (19% flagged, $74M net value) may be more practical to use.
+> Depending on review capacity, 0.300 (19% flagged, $74M net value) may be more practical to use.
 
 ### SHAP Interpretability
 
