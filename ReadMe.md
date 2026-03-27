@@ -141,7 +141,7 @@ Feature importance was validated through SHAP analysis, confirming that top feat
 
 | Test AUC | Train AUC (CV) | Difference |
 | :--- | :--- | :--- |
-| 0.715 | 0.718 | 0.003 |
+| 0.719| 0.721 | 0.002 |
 
 | Metric | No Default | Default |
 | :--- | :--- | :--- |
@@ -160,6 +160,6 @@ The model catches **64% of defaulters** on unseen data. When approving a borrowe
 | Model | CV AUC | Test AUC | Generalization Gap |
 | :--- | :--- | :--- | :--- |
 | Logistic Regression | 0.7026 | 0.697 | 0.005 |
-| CatBoost (tuned) | 0.718 | 0.715 | 0.003 |
+| CatBoost (tuned) | 0.721 | 0.719 | 0.002 |
 
-CatBoost outperforms the logistic regression baseline by **+0.018 AUC**, with the additional benefit of capturing non-linear patterns and providing SHAP based interpretability suitable for a risk management context.
+CatBoost outperforms the logistic regression baseline by **+0.022 AUC**, with the additional benefit of capturing non-linear patterns and providing SHAP based interpretability suitable for a risk management context.
