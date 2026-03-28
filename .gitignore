@@ -2,5 +2,6 @@ __pycache__/
 Old_projects/
 .vscode/
 Trees/catboost_info
+Trees/just_testing.ipynb
 Data/loan_data_holdout.csv
 Data/loan_data_sample.csv
