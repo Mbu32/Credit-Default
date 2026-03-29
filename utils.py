@@ -6,7 +6,6 @@ from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 
 
-#-------------
 
 
 zero_cols = [
@@ -101,9 +100,6 @@ def ratio_name(function_transformer, feature_names_in):
 
 
 
-# --------------------------
-
-# Add these to utils.py — after your imports and column lists
 
 from sklearn import set_config
 set_config(transform_output="pandas")
