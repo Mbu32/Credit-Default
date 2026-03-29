@@ -8,7 +8,7 @@ and machine learning techniques with an emphasis on interpretability and
 business impact.
 
 The project culminates in a simulated A/B test comparing the industry standard 
-decision threshold (0.5) against a data driven optimized threshold (0.206), 
+decision threshold (0.5) against a data driven optimized threshold (0.213), 
 using a held-out 90% of the dataset as the test population. The goal is to 
 quantify the real world net value of threshold optimization in a credit 
 risk context.
@@ -118,18 +118,18 @@ Rather than using the default 0.5 threshold, an expected value framework was app
 
 | Threshold | Precision | Recall | F1 | Flagged |
 | :--- | :--- | :--- | :--- | :--- |
-| 0.206 | 0.332 | 0.637 | 0.437 | 38.5% |
+| 0.213 | 0.340 | 0.619 | 0.439 | 36.6% |
 | 0.250 | 0.369 | 0.513 | 0.429 | 27.9% |
 | 0.300 | 0.415 | 0.392 | 0.403 | 19.0% |
 | 0.500 | 0.572 | 0.091 | 0.157 | 3.2% |
 
 | Threshold | Net Value |
 | :--- | :--- |
-| 0.206 | $105,678,761 |
+| 0.213 | $105,678,761 |
 | 0.300 | $74,264,002 |
 | 0.500 | $3,579,880 |
 
-> The optimal threshold of **0.206** produces **26x more net value** than the standard 0.5, by prioritizing defaulter detection over false alarm minimization.
+> The optimal threshold of **0.213** produces **26x more net value** than the standard 0.5, by prioritizing defaulter detection over false alarm minimization.
 
 > Depending on review capacity, 0.300 (19% flagged, $74M net value) may be more practical to use.
 
@@ -137,19 +137,15 @@ Rather than using the default 0.5 threshold, an expected value framework was app
 
 Feature importance was validated through SHAP analysis, confirming that top features act as **independent signals** (dendrogram distances > 0.2) with clear non-linear relationships, particularly `median__bc_util` which shows near-zero impact below 80% utilization followed by a sharp risk spike.
 
-### Test Set Results — Threshold 0.206
-
-| Test AUC | Train AUC (CV) | Difference |
-| :--- | :--- | :--- |
-| 0.719| 0.721 | 0.002 |
+### Test Set Results — Threshold 0.213
 
 | Metric | No Default | Default |
 | :--- | :--- | :--- |
-| Precision | 0.88 | 0.33 |
-| Recall | 0.67 | 0.64 |
-| F1 | 0.76 | 0.44 |
+| Precision | 0.88 | 0.34 |
+| Recall | 0.69 | 0.62 |
+| F1 | 0.78 | 0.44 |
 
-The model catches **64% of defaulters** on unseen data. When approving a borrower, the model is correct **88% of the time**. A test AUC difference of 0.003 confirms strong generalization.
+The model catches **62% of defaulters** on unseen data. When approving a borrower, the model is correct **88% of the time**. 
 
 **[Full CatBoost Breakdown →](/TreeModels/ReadMe.md)**
 
@@ -160,6 +156,6 @@ The model catches **64% of defaulters** on unseen data. When approving a borrowe
 | Model | CV AUC | Test AUC | Generalization Gap |
 | :--- | :--- | :--- | :--- |
 | Logistic Regression | 0.7026 | 0.697 | 0.005 |
-| CatBoost | 0.721 | 0.719 | 0.002 |
+| CatBoost | 0.722 | 0.720 | 0.002 |
 
-CatBoost outperforms the logistic regression baseline by **+0.022 AUC**, with the additional benefit of capturing non-linear patterns and providing SHAP based interpretability suitable for a risk management context.
+CatBoost outperforms the logistic regression baseline by **+0.023 AUC**, with the additional benefit of capturing non-linear patterns and providing SHAP based interpretability suitable for a risk management context. A test AUC difference of 0.002 confirms strong generalization.
