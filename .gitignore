@@ -4,3 +4,5 @@ Old_projects/
 Trees/catboost_info
 Data/loan_data_holdout.csv
 Data/loan_data_sample.csv
+Trees/overfitting.ipynb
+Trees/endtoend_trees.ipynb

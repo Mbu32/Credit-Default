@@ -32,26 +32,26 @@ A model's raw probability is useful if we know exactly where to draw the line be
 | Threshold| Precision| Recall| F1| Amount Flagged| Percentage Flagged
 | :--- | :--- | :--- | :--- | :--- | :---|
 |0.190|        0.318|        0.684|        0.434|45,153|43.2% of applicants  |     
-|0.206|        0.332 |       0.637  |      0.437|40,267|38.5% of applicants |
+|0.213|        0.340 |       0.619  |      0.439|40,267|36.6% of applicants |
 |0.250|        0.369  |      0.513    |    0.429|29,169|27.9% of applicants|
 |0.300|        0.415   |     0.392      |  0.403|19,839|19.0% of applicants |
 |0.350 |       0.457 |       0.289 |       0.354|13,281|12.7% of applicants  |   
 |0.400  |      0.499   |     0.207    |    0.293|8,720|8.3% of applicants   |
 |0.500  |      0.572    |    0.091      |  0.157|3,333|3.2% of applicants  |
 
-While **0.206** is the mathematical optimum score for F1, metric don't tell us the whole story so I translated that to dollar values and show their financial impact:
+While **0.213** is the mathematical optimum score for F1, metric don't tell us the whole story so I translated that to dollar values and show their financial impact:
 
 |Threshold |   Expected Loss |       Expected Gain   |     Net Value |          
 | :--- | :--- | :--- | :--- |
 |0.190 |       $115,222,627  |       $223,082,557  |       $107,859,930|        
-|0.206 |       $116,313,212  |       $221,991,973  |       $105,678,761|        
+|0.213 |       $116,406,212  |       $221,991,973  |       $105,678,761|        
 |0.250 |       $122,902,276  |       $215,402,909  |       $92,500,634 |        
 |0.300 |       $132,020,591  |       $206,284,593  |       $74,264,002 |        
 |0.350 |       $142,279,452  |       $196,025,733  |       $53,746,281 |        
 |0.400 |       $151,831,294  |       $186,473,891  |       $34,642,597 |        
 |0.500 |       $167,362,652  |       $170,942,532  |       $3,579,880  |
 
-While 0.206 maximizes F1 and net value, it flags 38.5% of applicants. Depending on actual capacity, 0.300 (19% flagged, $74M net value) might be more realistic.
+While 0.213 maximizes F1 and net value, it flags 36.6% of applicants. Depending on actual capacity, 0.300 (19% flagged, $74M net value) might be more realistic.
 
 
 > **Assumptions**  
@@ -115,7 +115,7 @@ Running our pruned and tuned (did you like the rhyme there - ahem ahem anyway) m
 
 | Test AUC | Train AUC (CV)| Difference|
 | :--- | :--- | :--- |
-|0.715|0.718| 0.003|
+|0.719|0.722| 0.003|
 
 I think I would call this a success, with unseen data our model generalized very well compared to our training data and gives us an almost identical AUC!
 
@@ -125,7 +125,7 @@ A better view of this would be to look at our actual results via a Confusion Mat
 
 
 
-With our optimal Threshold of 0.206
+With our optimal Threshold of 0.213
 
 
 | Metric | No Default | Default |
