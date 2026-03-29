@@ -160,6 +160,6 @@ The model catches **64% of defaulters** on unseen data. When approving a borrowe
 | Model | CV AUC | Test AUC | Generalization Gap |
 | :--- | :--- | :--- | :--- |
 | Logistic Regression | 0.7026 | 0.697 | 0.005 |
-| CatBoost (tuned) | 0.721 | 0.719 | 0.002 |
+| CatBoost | 0.721 | 0.719 | 0.002 |
 
 CatBoost outperforms the logistic regression baseline by **+0.022 AUC**, with the additional benefit of capturing non-linear patterns and providing SHAP based interpretability suitable for a risk management context.
