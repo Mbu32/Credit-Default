@@ -163,31 +163,44 @@ CatBoost outperforms the logistic regression baseline by **+0.023 AUC**, with th
 
 ---
 
-# Simulating our model on hold out data
+## A/B Test Results — Threshold Optimization on Holdout Data (90%)
 
-We run a basic A/B test to show how our Gains and Losses would look like on our optimal threshold (0.213) versus the standard (0.5) using our catboost model.
-Amount of instances:          1,175,749
-==================================================
-Policy: Control (0.5)
-==================================================
-Net Value:              $    206,844,882
-Expected Loss:          $  1,799,537,714
-Expected Gain:          $  2,006,382,597
-Recall (defaulters):              0.146
-Precision:                        0.520
-Flagged:                           5.7%
-Default rate approved:            0.182
+The simulation compares two lending policies applied to **1,175,938 holdout applicants**:
+- **Control**: Industry standard threshold (0.5)  
+- **Treatment**: optimal threshold (0.213)
 
-==================================================
-Policy: Treatment (0.213)
-==================================================
-Net Value:              $  1,201,893,638
-Expected Loss:          $  1,302,013,336
-Expected Gain:          $  2,503,906,975
-Recall (defaulters):              0.696
-Precision:                        0.312
-Flagged:                          44.8%
-Default rate approved:            0.111
+---
 
-Net Value Improvement:  $995,048,756
-Lift:                   5.8x
+### Financial Impact
+
+| Metric | Control (0.5) | Treatment (0.213) | Difference |
+| :--- | ---: | ---: | ---: |
+| Net Value | $206,844,882 | $1,201,893,638 | **+$995,048,756** |
+| Expected Gain | $2,006,382,597 | $2,503,906,975 | +$497,524,378 |
+| Expected Loss | $1,799,537,714 | $1,302,013,336 | -$497,524,378 |
+
+> Optimizing the decision threshold alone, without changing the model produces a **5.8x improvement** in net value (LIFT).
+
+---
+
+### Risk & Operational Metrics
+
+| Metric | Control (0.5) | Treatment (0.213) |
+| :--- | ---: | ---: |
+| Recall (defaulters caught) | 14.6% | 69.6% |
+| Precision (flags that are real defaults) | 52.0% | 31.2% |
+| Applications Flagged | 5.7% | 44.8% |
+| Default Rate in Approved Loans | 18.2% | 11.1% |
+
+---
+
+### Key Takeaways
+
+- The control policy misses **85%** of bad loans
+- The treatment policy catches **70%** at the cost of a higher flag rate
+- Default rate in approved loans drops from **18.2% → 11.1%** — the most operationally meaningful metric for a lender
+- The **44.8% flag rate** is our operational constraint 
+
+> **Note:** Assumptions used — Loss Given Default: 60% of loan amount, 
+> opportunity cost of false positives: average interest revenue per loan. 
+> All figures are simulated on held out data the model never saw during training.
