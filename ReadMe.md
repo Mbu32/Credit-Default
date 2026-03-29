@@ -159,3 +159,35 @@ The model catches **62% of defaulters** on unseen data. When approving a borrowe
 | CatBoost | 0.722 | 0.720 | 0.002 |
 
 CatBoost outperforms the logistic regression baseline by **+0.023 AUC**, with the additional benefit of capturing non-linear patterns and providing SHAP based interpretability suitable for a risk management context. A test AUC difference of 0.002 confirms strong generalization.
+
+
+---
+
+# Simulating our model on hold out data
+
+We run a basic A/B test to show how our Gains and Losses would look like on our optimal threshold (0.213) versus the standard (0.5) using our catboost model.
+Amount of instances:          1,175,749
+==================================================
+Policy: Control (0.5)
+==================================================
+Net Value:              $    206,844,882
+Expected Loss:          $  1,799,537,714
+Expected Gain:          $  2,006,382,597
+Recall (defaulters):              0.146
+Precision:                        0.520
+Flagged:                           5.7%
+Default rate approved:            0.182
+
+==================================================
+Policy: Treatment (0.213)
+==================================================
+Net Value:              $  1,201,893,638
+Expected Loss:          $  1,302,013,336
+Expected Gain:          $  2,503,906,975
+Recall (defaulters):              0.696
+Precision:                        0.312
+Flagged:                          44.8%
+Default rate approved:            0.111
+
+Net Value Improvement:  $995,048,756
+Lift:                   5.8x
