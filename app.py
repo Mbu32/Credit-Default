@@ -13,8 +13,8 @@ from typing import Optional
 app = FastAPI(title='Credit Default Risk')
 
 model = CatBoostClassifier()
-model.load_model('model/Trees/catboost_tuned.cbm')
-utils.preprocessor= joblib.load('')
+model.load_model('models/Trees/catboost_tuned.cbm')
+utils.preprocessor= joblib.load('models/Trees/preprocessor.pkl')
 means_smoothed= joblib.load('models/Trees/state_means.pkl')
 global_default_mean = joblib.load('models/Trees/global_default_mean.pkl')
 upperbounds= joblib.load('models/Trees/upperbounds.pkl')
@@ -22,7 +22,7 @@ lowerbounds= joblib.load('models/Trees/lowerbounds.pkl')
 train_columns = joblib.load('models/Trees/train_columns.pkl')
 
 
-with open('model/config.json') as f:
+with open('models/config.json') as f:
     config = json.load(f)
 
 threshold = config['threshold']
@@ -36,9 +36,9 @@ class LoanApplication(BaseModel):
     annual_inc: float
     dti: float
     addr_state: str
-    home_ownership: str
-    verification_status: str
-    purpose: str
+    home_ownership: str = 'RENT'
+    verification_status: str = 'Verified'
+    purpose: int = 1
     application_type: str = "Individual"  # sensible default
     initial_list_status: str = "w"        # sensible default
 
