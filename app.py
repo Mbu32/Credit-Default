@@ -14,7 +14,7 @@ app = FastAPI(title='Credit Default Risk')
 
 model = CatBoostClassifier()
 model.load_model('models/Trees/catboost_tuned.cbm')
-utils.preprocessor= joblib.load('models/Trees/preprocessor.pkl')
+utils.load_fitted_preprocessor('models/Trees/preprocessor.pkl')
 means_smoothed= joblib.load('models/Trees/state_means.pkl')
 global_default_mean = joblib.load('models/Trees/global_default_mean.pkl')
 upperbounds= joblib.load('models/Trees/upperbounds.pkl')
@@ -39,8 +39,8 @@ class LoanApplication(BaseModel):
     home_ownership: str = 'RENT'
     verification_status: str = 'Verified'
     purpose: int = 1
-    application_type: str = "Individual"  # sensible default
-    initial_list_status: str = "w"        # sensible default
+    application_type: str = "Individual"  
+    initial_list_status: str = "w"        
 
     # Zero-imputed — default to 0 since that's what pipeline does
     max_bal_bc: float = 0
@@ -131,7 +131,7 @@ def health():
 @app.post('/predict')
 def predict(application: LoanApplication):
 
-    X = pd.DataFrame([application.dict()])
+    X = pd.DataFrame([application.model_dump()])
 
 
     #now for preproc
@@ -166,7 +166,7 @@ def get_risk_tier(proba):
 # Batch endpoint
 @app.post("/predict_batch")
 def predict_batch(applications: list[LoanApplication]):
-    X= pd.DataFrame([a.dict() for a in applications])
+    X= pd.DataFrame([a.model_dump() for a in applications])
 
     X_pre = utils.preprocess_test(
         X, means_smoothed, global_default_mean,
@@ -185,3 +185,6 @@ def predict_batch(applications: list[LoanApplication]):
         }
         for p in probas
     ]
+
+# uvicorn app:app --reload
+# http://localhost:8000/docs

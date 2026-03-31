@@ -5,7 +5,10 @@ from sklearn.preprocessing import FunctionTransformer
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 
-
+def load_fitted_preprocessor(path):
+    global preprocessor
+    import joblib
+    preprocessor = joblib.load(path)
 
 
 zero_cols = [
@@ -81,7 +84,6 @@ numerical_features = ['loan_amnt', 'term', 'emp_length',
        'is_currently_delinq', 'has_il_history']
 
 
-#-------------
 def winsorize_fn(X):
     return np.array(winsorize(np.array(X), limits=[0.01, 0.01], axis=0))
 
@@ -159,15 +161,18 @@ def preprocess_train(X_train, y_train, numerical_features):
 
     train_columns_before_impute = X_train_full.columns.tolist()
 
-    X_train_processed = pd.DataFrame(
-        preprocessor.fit_transform(X_train_full),
-        columns=preprocessor.get_feature_names_out(X_train_full.columns)
-)
+    X_train_processed = preprocessor.fit_transform(X_train_full)
+
     X_train_processed = add_features(X_train_processed)
 
-    upperbounds = X_train_processed.quantile(0.99)
-    lowerbounds = X_train_processed.quantile(0.01)
-    X_train_processed = X_train_processed.clip(lower=lowerbounds, upper=upperbounds, axis=1)
+    #Only clipping numerical Columns
+    all_numeric_cols = X_train_processed.select_dtypes(include = [np.number]).columns
+    exclude_keywords = ['purpose','home_ownership', 'verification_status', 'application_type']
+    cols_to_clip = [col for col in all_numeric_cols if not any(kw in col for kw in exclude_keywords)]
+
+    upperbounds = X_train_processed[cols_to_clip].quantile(0.99)
+    lowerbounds = X_train_processed[cols_to_clip].quantile(0.01)
+    X_train_processed[cols_to_clip] = X_train_processed[cols_to_clip].clip(lower=lowerbounds, upper=upperbounds, axis=1)
 
     X_train_processed = X_train_processed.drop(
         columns=[c for c in features_todrop if c in X_train_processed.columns]
@@ -182,23 +187,23 @@ def preprocess_train(X_train, y_train, numerical_features):
         train_columns_before_impute
     )
 
-def preprocess_test(X_test, means_smoothed, global_default_mean,
-                    upperbounds, lowerbounds, numerical_features,
-                    train_columns_before_impute):
+
+
+def preprocess_test(X_test,means_smoothed,global_default_mean,
+    upperbounds,lowerbounds,numerical_features,train_columns_before_impute):
+
     X_test = apply_state_encoding(X_test, means_smoothed, global_default_mean)
     X_encoded_test = apply_ohe(X_test)
     X_test_full = pd.concat([X_test[numerical_features], X_encoded_test], axis=1)
     X_test_full = X_test_full.reindex(columns=train_columns_before_impute, fill_value=0)
-    
-    X_test_processed = pd.DataFrame(
-        preprocessor.transform(X_test_full),
-        columns=preprocessor.get_feature_names_out(X_test_full.columns))
-    
-    
-    
+    X_test_processed = preprocessor.transform(X_test_full)
+
+    X_test_processed = pd.DataFrame(X_test_processed,columns = preprocessor.get_feature_names_out())
+
     X_test_processed = add_features(X_test_processed)
-    X_test_processed = X_test_processed.clip(lower=lowerbounds, upper=upperbounds, axis=1)
-    X_test_processed = X_test_processed.drop(
-        columns=[c for c in features_todrop if c in X_test_processed.columns]
-    )
+
+    cols_to_clip = upperbounds.index
+    X_test_processed[cols_to_clip] = X_test_processed[cols_to_clip].clip(lower=lowerbounds, upper=upperbounds, axis=1)
+    X_test_processed = X_test_processed.drop(columns=[c for c in features_todrop if c in X_test_processed.columns])
+
     return X_test_processed
