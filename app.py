@@ -40,7 +40,7 @@ class LoanApplication(BaseModel):
     verification_status: str = 'Verified'
     purpose: int = 1
     application_type: str = "Individual"  
-    initial_list_status: str = "w"        
+    initial_list_status: int = 1        
 
     # Zero-imputed — default to 0 since that's what pipeline does
     max_bal_bc: float = 0

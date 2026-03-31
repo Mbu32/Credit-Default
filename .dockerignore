@@ -1,0 +1,11 @@
+__pycache__/
+.vscode/
+*.ipynb
+ANN/
+Data/
+SQL/
+.git
+docs/
+Images/
+Images_log/
+LogisticRegression/
