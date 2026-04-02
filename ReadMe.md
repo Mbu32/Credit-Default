@@ -27,7 +27,7 @@ Develop and compare classification models for credit default prediction, with em
 ### Dataset
 - [Lending Club Loan Data](https://www.kaggle.com/datasets/adarshsng/lending-club-loan-data-csv) 
 - Real world data from 2020.
-- This company is a peer-to-peer lending corp based in the US that is currently active.
+- This company is a peer to peer lending corp based in the US that is currently active.
 
 ### Initial Data Engineering & Feature Pruning (SQL Pipeline)
 
@@ -41,7 +41,7 @@ Full SQL workflow can be checked here with details on every step: [SQL](https://
 
 ## Logistic Regression &  Baseline
 
-Before moving to complex non-linear models, I established a baseline using Logistic Regression. This phase focused on: handling extreme outliers (Winsorization at the 1st and 99th percentiles), addressing multicollinearity, and optimizing the solver with ElasticNet regularization.
+Before moving to complex non-linear models, I established a baseline using Logistic Regression. This section focused on handling extreme outliers (Winsorization at the 1st and 99th percentiles), addressing multicollinearity, and optimizing the solver with ElasticNet regularization.
 
 ### Model Performance with 5 Fold Cross-Validation
 
