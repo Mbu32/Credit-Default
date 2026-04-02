@@ -201,6 +201,6 @@ The simulation compares two lending policies applied to **1,175,938 holdout appl
 - Default rate in approved loans drops from **18.2% → 11.1%**, the most operationally meaningful metric for a lender
 - The **44.8% flag rate** is our operational constraint 
 
-> **Note:** Assumptions used: Loss Given Default: 60% of loan amount, 
+> **Note:** Assumptions used were Loss Given Default: 60% of loan amount, 
 > opportunity cost of false positives: average interest revenue per loan. 
 > All figures are simulated on held out data the model never saw during training.
