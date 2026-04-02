@@ -33,7 +33,7 @@ Develop and compare classification models for credit default prediction, with em
 
 Preprocessing was conducted in SQL prior to modeling.
 
-- Reduced dataset from **144 columns → 91 columns**
+- Reduced dataset from **144 columns to 91 columns**
 - Removed redundant and post loan outcome leakage variables  
 - Documented rationale for each decision
 
@@ -81,7 +81,7 @@ I've added the Effect plot to show priority our model put on features rather tha
 
 ---
 
-For a more detailed breakdown of all steps taken and all logic behind steps, **[Full Logistic Regression Breakdown →](/LogisticRegression/ReadMe.md)**
+For a more detailed breakdown of all steps taken and all logic behind steps, **[Full Logistic Regression Breakdown ](/LogisticRegression/ReadMe.md)**
 
 
 ---
@@ -147,7 +147,7 @@ Feature importance was validated through SHAP analysis, confirming that top feat
 
 The model catches **62% of defaulters** on unseen data. When approving a borrower, the model is correct **88% of the time**. 
 
-**[Full CatBoost Breakdown →](/TreeModels/ReadMe.md)**
+**[Full CatBoost Breakdown ](/TreeModels/ReadMe.md)**
 
 ---
 
@@ -198,7 +198,7 @@ The simulation compares two lending policies applied to **1,175,938 holdout appl
 
 - The control policy misses **85%** of bad loans
 - The treatment policy catches **70%** at the cost of a higher flag rate
-- Default rate in approved loans drops from **18.2% → 11.1%**, the most operationally meaningful metric for a lender
+- Default rate in approved loans drops from **18.2% to 11.1%**, the most operationally meaningful metric for a lender
 - The **44.8% flag rate** is our operational constraint 
 
 > **Note:** Assumptions used were Loss Given Default: 60% of loan amount, 
